@@ -32,14 +32,15 @@
             <table class="display table table-hover table-sm table-striped" id="waterTable">
                 <thead>
                     <tr>
-                        <th class="text-primary-emphasis" title="Date">Date</th>
-                        <th class="text-primary-emphasis" title="Gallons">Gallons</th>
+                        <th class="text-primary" title="Date">Date</th>
+                        <th class="text-primary" title="Gallons">Gallons</th>
                     </tr>
                 </thead>
-                <tbody class="table-group-divider"><!-- --></tbody>
+                <tbody class="table-group-divider">
+                </tbody>
             </table>
             <script>
-                table = new DataTable('#waterTable', {
+                new DataTable('#waterTable', {
                     ajax: {
                         url: 'water.json',
                         dataSrc: ''
@@ -48,18 +49,30 @@
                         {
                             data: 'Date',
                             render: function (data, type) {
-                                if ((type === 'display' || type === 'filter' || type === 'order')) {
-                                    return new moment.tz(data, 'America/New_York').format('dddd, MMMM Do YYYY')
+                                let momentData = new moment.tz(data, 'America/New_York')
+                                if (type === 'display') {
+                                    let momentDT = momentData.format()
+                                    let momentDisplay = momentData.format('dddd, MMMM Do, YYYY')
+                                    let momentTitle = `${momentDisplay} (${momentDT})`
+                                    return `<time datetime="${momentDT}"><span title="${momentTitle}">${momentDisplay}</span></time>`
                                 }
-                                return data
+                                return momentData
                             },
-                            type: 'moment-dddd, MMMM Do YYYY',
+                            type: 'moment',
                         },
                         {
                             data: 'Gallons',
                             render: function (data, type) {
-                                if (type === 'display' && data > 100) {
-                                    return `<span class="fw-bold text-primary-emphasis">${data}</span>`
+                                if (type === 'display') {
+                                    let gallonText = 'primary-emphasis'
+                                    if (data > 100) {
+                                        gallonText = 'danger-emphasis'
+                                    } else if (data > 75) {
+                                        gallonText = 'warning-emphasis'
+                                    } else if (data > 50) {
+                                        gallonText = 'info-emphasis'
+                                    }
+                                    return `<b class="font-monospace text-${gallonText}" title="${data} gallons">${data}</b>`
                                 }
                                 return data
                             },
@@ -67,9 +80,13 @@
                         }
                     ],
                     language: {
-                        searchBuilder: {
-                            title: '<span class="text-primary-emphasis">Search</span>'
-                        }
+                        'emptyTable': '<b class="text-primary">No days available in table</b>',
+                        'info': '<b class="text-primary">Showing _START_ to _END_ of _TOTAL_ days</b>',
+                        'infoEmpty': '<b class="text-primary">Showing 0 to 0 of 0 days</b>',
+                        'infoFiltered': '<b class="text-primary">(filtered from _MAX_ total days)</b>',
+                        'lengthMenu': '<b class="text-primary">_MENU_ days</b>',
+                        'zeroRecords': '<b class="text-primary">No matching days found</b>',
+                        searchBuilder: { title: '<b class="text-primary">Search</b>' }
                     },
                     layout: {
                         topStart: 'searchBuilder',
@@ -80,7 +97,12 @@
                         bottom: 'paging',
                         bottomEnd: 'info'
                     },
+                    lengthMenu: [
+                        5, {label: '10 (default)', value: 10},
+                        15, 20, 25, 50, 75, 100, {label: 'all', value: -1}
+                    ],
                     order: [[0, 'desc']],
+                    pageLength: 10,
                     searchBuilder: {depthLimit: 1},
                 })
             </script>
