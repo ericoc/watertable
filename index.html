@@ -13,23 +13,22 @@
         <meta property="og:title" content="Water Table">
         <title>Water Table</title>
         <script src="jquery-3.7.1.min.js"></script>
-        <script src="moment/moment-with-locales.js"></script>
-        <script src="moment/moment-timezone-with-data-10-year-range.min.js"></script>
+        <script src="luxon.min.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <link href="datatables/datatables.min.css" rel="stylesheet">
         <script src="datatables/datatables.min.js"></script>
     </head>
-    <body class="container-fluid">
+    <body>
         <header class="header">
-            <nav class="navbar navbar-dark navbar-expand navbar-expand-lg">
-                <a class="btn btn-primary p-1 navbar-brand nav-link" href="#" onclick="document.location.reload()">
+            <nav class="navbar navbar-dark">
+                <a class="btn btn-primary mx-1 px-1 navbar-brand nav-link" href="#" onclick="document.location.reload()">
                     💧 Water Table 🚰
                 </a>
             </nav>
         </header>
-        <main class="container-fluid">
-            <table class="display table table-hover table-sm table-striped" id="waterTable">
+        <main class="container-md">
+            <table class="display table table-hover table-sm table-striped" id="waterTable" style="width: auto;">
                 <thead>
                     <tr>
                         <th class="text-primary" title="Date">Date</th>
@@ -40,6 +39,7 @@
                 </tbody>
             </table>
             <script>
+                let DateTime = luxon.DateTime;
                 new DataTable('#waterTable', {
                     ajax: {
                         url: 'water.json',
@@ -48,17 +48,7 @@
                     columns: [
                         {
                             data: 'Date',
-                            render: function (data, type) {
-                                let momentData = new moment.tz(data, 'America/New_York')
-                                if (type === 'display') {
-                                    let momentDT = momentData.format()
-                                    let momentDisplay = momentData.format('dddd, MMMM Do, YYYY')
-                                    let momentTitle = `${momentDisplay} (${momentDT})`
-                                    return `<time datetime="${momentDT}"><span title="${momentTitle}">${momentDisplay}</span></time>`
-                                }
-                                return momentData
-                            },
-                            type: 'moment',
+                            render: DataTable.render.datetime('DDDD')
                         },
                         {
                             data: 'Gallons',
@@ -72,7 +62,7 @@
                                     } else if (data > 50) {
                                         gallonText = 'info-emphasis'
                                     }
-                                    return `<b class="font-monospace text-${gallonText}" title="${data} gallons">${data}</b>`
+                                    return `<code class="font-monospace text-${gallonText}" title="${data} gallons">${data}</code>`
                                 }
                                 return data
                             },
@@ -80,13 +70,13 @@
                         }
                     ],
                     language: {
-                        'emptyTable': '<b class="text-primary">No days available in table</b>',
-                        'info': '<b class="text-primary">Showing _START_ to _END_ of _TOTAL_ days</b>',
-                        'infoEmpty': '<b class="text-primary">Showing 0 to 0 of 0 days</b>',
-                        'infoFiltered': '<b class="text-primary">(filtered from _MAX_ total days)</b>',
-                        'lengthMenu': '<b class="text-primary">_MENU_ days</b>',
-                        'zeroRecords': '<b class="text-primary">No matching days found</b>',
-                        searchBuilder: { title: '<b class="text-primary">Search</b>' }
+                        'emptyTable': 'No days available in table',
+                        'info': 'Showing _START_ to _END_ of _TOTAL_ days',
+                        'infoEmpty': 'Showing 0 to 0 of 0 days',
+                        'infoFiltered': '(filtered from _MAX_ total days)',
+                        'lengthMenu': '_MENU_ days',
+                        'zeroRecords': 'No matching days found',
+                        searchBuilder: { title: '' }
                     },
                     layout: {
                         topStart: 'searchBuilder',
@@ -94,7 +84,7 @@
                             buttons: ['csvHtml5', 'excelHtml5', 'print']
                         },
                         bottomStart: 'pageLength',
-                        bottom: 'paging',
+                        bottom1: 'paging',
                         bottomEnd: 'info'
                     },
                     lengthMenu: [

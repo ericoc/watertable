@@ -2,6 +2,6 @@
 !.gitignore
 bootstrap/
 datatables/
-moment/
 jquery*.js
+luxon*.js
 *.json
