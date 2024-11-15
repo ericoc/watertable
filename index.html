@@ -8,7 +8,6 @@
         <meta name="robots" content="noindex,nofollow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:type" content="website">
-        <meta property="og:image" content="img/logo.png">
         <meta property="og:site_name" content="Water Table">
         <meta property="og:title" content="Water Table">
         <title>Water Table</title>
@@ -22,10 +21,10 @@
     </head>
     <body class="container-fluid">
         <header class="header">
-            <nav class="navbar navbar-dark navbar-expand navbar-expand-lg p-1">
-                <h1 class="navbar-brand">
-                    <a class="btn btn-primary navbar-text nav-link" href="#">💧</a>
-                </h1>
+            <nav class="navbar navbar-dark navbar-expand navbar-expand-lg">
+                <a class="btn btn-primary p-1 navbar-brand nav-link" href="#" onclick="document.location.reload()">
+                    💧 Water Table
+                </a>
             </nav>
         </header>
         <main class="container-fluid">
@@ -37,14 +36,6 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider"><!-- --></tbody>
-<!--
-                <tfoot class="table-group-divider">
-                    <tr>
-                        <th class="text-primary-emphasis" title="Date">Date</th>
-                        <th class="text-primary-emphasis" title="Gallons">Gallons</th>
-                    </tr>
-                </tfoot>
--->
             </table>
             <script>
                 table = new DataTable('#waterTable', {
@@ -77,10 +68,10 @@
                     language: { searchBuilder: { title: '<span class="text-primary-emphasis">Search</span>' } },
                     layout: {
                         topStart: 'searchBuilder',
-                        // top: {buttons: ['csvHtml5', 'excelHtml5', 'print']},
-                        topEnd: 'info',
+                        topEnd: {buttons: ['csvHtml5', 'excelHtml5', 'print']},
                         bottomStart: 'pageLength',
-                        bottomEnd: 'paging'
+                        bottom: 'paging',
+                        bottomEnd: 'info'
                     },
                     order: [[0, 'desc']],
                     searchBuilder: {depthLimit: 1},
