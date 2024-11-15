@@ -1,3 +1,3 @@
-# Water Table
+# [💧 Water Table 🚰](https://water.ericoc.com/)
 
-- Using DataTables for water usage.
+## [DataTables](https://datatables.net/) for water usage.
