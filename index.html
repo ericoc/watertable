@@ -48,7 +48,7 @@
                     columns: [
                         {
                             data: 'Date',
-                            render: function (data, type) {
+                            render: async function (data, type) {
                                 let momentData = new moment.tz(data, 'America/New_York')
                                 if (type === 'display') {
                                     let momentDT = momentData.format()
@@ -62,7 +62,7 @@
                         },
                         {
                             data: 'Gallons',
-                            render: function (data, type) {
+                            render: async function (data, type) {
                                 if (type === 'display') {
                                     let gallonText = 'primary-emphasis'
                                     if (data > 100) {
