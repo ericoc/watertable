@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" class="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Eric O'Callaghan">
+        <meta name="description" content="Water Table">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="img/logo.png">
+        <meta property="og:site_name" content="NWater Table">
+        <meta property="og:title" content="Water Table">
+        <title>Water Table</title>
+        <script src="jquery-3.7.1.min.js"></script>
+        <script src="moment/moment-with-locales.js"></script>
+        <script src="moment/moment-timezone-with-data-10-year-range.min.js"></script>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+        <link href="datatables/datatables.min.css" rel="stylesheet">
+        <script src="datatables/datatables.min.js"></script>
+    </head>
+    <body class="container-fluid">
+        <header class="header">
+            <nav class="navbar navbar-dark navbar-expand navbar-expand-lg p-1">
+                <h1 class="navbar-brand">
+                    <a class="btn btn-primary navbar-text nav-link" href="#">💧</a>
+                </h1>
+            </nav>
+        </header>
+        <main class="container-fluid">
+            <table class="display table table-hover table-sm table-striped" id="waterTable">
+                <thead>
+                    <tr>
+                        <th class="text-primary-emphasis" title="Date">Date</th>
+                        <th class="text-primary-emphasis" title="Gallons">Gallons</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider"><!-- --></tbody>
+<!--
+                <tfoot class="table-group-divider">
+                    <tr>
+                        <th class="text-primary-emphasis" title="Date">Date</th>
+                        <th class="text-primary-emphasis" title="Gallons">Gallons</th>
+                    </tr>
+                </tfoot>
+-->
+            </table>
+            <script>
+                table = new DataTable('#waterTable', {
+                    ajax: {
+                        url: 'water.json',
+                        dataSrc: ''
+                    },
+                    columns: [
+                        {
+                            data: 'Date',
+                            render: function (data, type) {
+                                if ((type === 'display' || type === 'filter' || type === 'order')) {
+                                    return new moment.tz(data, 'America/New_York').format('dddd, MMMM Do YYYY')
+                                }
+                                return data
+                            },
+                            type: 'moment-dddd, MMMM Do YYYY',
+                        },
+                        {
+                            data: 'Gallons',
+                            render: function (data, type) {
+                                if (type === 'display' && data > 100) {
+                                    return `<span class="fw-bold text-primary-emphasis">${data}</span>`
+                                }
+                                return data
+                            },
+                            type: 'num',
+                        }
+                    ],
+                    language: { searchBuilder: { title: '<span class="text-primary-emphasis">Search</span>' } },
+                    layout: {
+                        topStart: 'searchBuilder',
+                        // top: {buttons: ['csvHtml5', 'excelHtml5', 'print']},
+                        topEnd: 'info',
+                        bottomStart: 'pageLength',
+                        bottomEnd: 'paging'
+                    },
+                    order: [[0, 'desc']],
+                    searchBuilder: {depthLimit: 1},
+                })
+            </script>
+
+        </main>
+    </body>
+</html>

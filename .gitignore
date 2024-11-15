@@ -1,0 +1,8 @@
+.*
+!.gitignore
+bootstrap/
+datatables/
+moment/
+jquery*.js
+*.csv
+*.json
