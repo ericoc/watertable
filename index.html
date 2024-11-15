@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="author" content="Eric O'Callaghan">
         <meta name="description" content="Water Table">
+        <meta name="format-detection" content="telephone=no">
         <meta name="robots" content="noindex,nofollow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:type" content="website">
@@ -23,7 +24,7 @@
         <header class="header">
             <nav class="navbar navbar-dark navbar-expand navbar-expand-lg">
                 <a class="btn btn-primary p-1 navbar-brand nav-link" href="#" onclick="document.location.reload()">
-                    💧 Water Table
+                    💧 Water Table 🚰
                 </a>
             </nav>
         </header>
@@ -65,10 +66,16 @@
                             type: 'num',
                         }
                     ],
-                    language: { searchBuilder: { title: '<span class="text-primary-emphasis">Search</span>' } },
+                    language: {
+                        searchBuilder: {
+                            title: '<span class="text-primary-emphasis">Search</span>'
+                        }
+                    },
                     layout: {
                         topStart: 'searchBuilder',
-                        topEnd: {buttons: ['csvHtml5', 'excelHtml5', 'print']},
+                        topEnd: {
+                            buttons: ['csvHtml5', 'excelHtml5', 'print']
+                        },
                         bottomStart: 'pageLength',
                         bottom: 'paging',
                         bottomEnd: 'info'
