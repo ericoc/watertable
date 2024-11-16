@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" class="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Eric O'Callaghan">
+        <meta name="description" content="Water Chart">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://water.ericoc.com/logo.png">
+        <meta property="og:site_name" content="💧 Water Chart 🚰">
+        <meta property="og:title" content="💧 Water Chart 🚰">
+        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="apple-touch-icon" href="/logo.png">
+        <title>💧 Water Chart 🚰</title>
+        <script src="/jquery-3.7.1.min.js"></script>
+        <script src="/luxon.min.js"></script>
+        <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/chart/chart.js"></script>
+        <script src="/chart/chartjs-luxon.js"></script>
+        <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <header class="header">
+            <nav class="navbar navbar-dark">
+                <a class="mx-1 px-1 nav-link navbar-brand" href="index.html" title="💧 Water Chart 🚰">
+                    💧 Water Chart 🚰
+                </a>
+            </nav>
+        </header>
+        <main class="container-md">
+
+            <div>
+                <canvas id="waterChart"></canvas>
+            </div>
+
+            <script>
+                const DateTime = luxon.DateTime
+
+                let waterData = []
+                let xhr = new XMLHttpRequest()
+                xhr.open("GET", "/water.json")
+                xhr.onreadystatechange = async () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        waterData = JSON.parse(xhr.responseText)
+                        const ctx = document.getElementById('waterChart')
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: waterData.map(row => row['Date']),
+                                datasets: [
+                                    {
+                                        label: 'Date',
+                                        data: waterData.map(row => row['Date']),
+                                    },
+                                    {
+                                        borderColor: '#09f',
+                                        color: '#09f',
+                                        backgroundColor: '#09f',
+                                        label: 'Gallons',
+                                        data: waterData.map(row => row['Gallons'])
+                                    }
+                                ]
+                            },
+                            options: {
+                                plugins: {legend: {display: false}},
+                                scales: {
+                                    x: {
+                                        time: {tooltipFormat: 'DDDD'},
+                                        type: 'time'
+                                    }
+                                },
+                                // y: {}
+                            }
+                        })
+                    }
+                }
+                xhr.send()
+            </script>
+        </main>
+    </body>
+</html>

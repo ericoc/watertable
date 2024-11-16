@@ -1,6 +1,7 @@
 .*
 !.gitignore
 bootstrap/
+chart/chart*.js
 datatables/
 jquery*.js
 luxon*.js
