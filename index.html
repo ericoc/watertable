@@ -63,28 +63,26 @@
 
                 async function dateDisplay (api, col=0) {
                     let days = api.column(col).data()
-                    let maxDate = null
                     let minDate = null
+                    let maxDate = null
                     for (let i = 0; i < days.length; i++) {
                         if (days[i]) {
-                            let testDay = Date.parse(days[i])
+                            let testDay = DateTime.fromISO(days[i])
                             if (testDay) {
-                                if (maxDate == null || testDay > maxDate) {
-                                    maxDate = testDay
-                                }
                                 if (minDate == null || testDay < minDate) {
                                     minDate = testDay
+                                }
+                                if (maxDate == null || testDay > maxDate) {
+                                    maxDate = testDay
                                 }
                             }
                         }
                     }
-                    if (maxDate) {
-                        const maxDateTime = new DateTime.fromMillis(maxDate)
-                        document.getElementById('maximumDate').innerHTML = `<time datetime="${maxDateTime.toISODate()}">${maxDateTime.toLocaleString(hugeDateFmt)}</time>`
-                    }
                     if (minDate) {
-                        const minDateTime = new DateTime.fromMillis(minDate)
-                        document.getElementById('minimumDate').innerHTML = `<time datetime="${minDateTime.toISODate()}">${minDateTime.toLocaleString(hugeDateFmt)}</time>`
+                        document.getElementById('minimumDate').innerHTML = `<time datetime="${minDate.toISODate()}">${minDate.toLocaleString(hugeDateFmt)}</time>`
+                    }
+                    if (maxDate) {
+                        document.getElementById('maximumDate').innerHTML = `<time datetime="${maxDate.toISODate()}">${maxDate.toLocaleString(hugeDateFmt)}</time>`
                     }
                 }
 
@@ -103,9 +101,8 @@
                             data: 'Date',
                             render: function (data, type) {
                                 if (type === 'display') {
-                                    let day = Date.parse(data)
-                                    let dt = new DateTime.fromMillis(day).setZone('America/New_York')
-                                    return `<time datetime="${dt.toISODate()}">${dt.toLocaleString(hugeDateFmt)}</time>`
+                                    let day = new DateTime.fromISO(data).toLocaleString(hugeDateFmt)
+                                    return `<time datetime="${data}">${day}</time>`
                                 }
                                 return data
                             },
