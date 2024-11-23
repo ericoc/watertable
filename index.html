@@ -21,6 +21,10 @@
         <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
         <link href="/datatables/datatables.min.css" rel="stylesheet">
         <script src="/datatables/datatables.min.js"></script>
+        <script src="/datatables/sum.js"></script>
+        <style>
+            nav a:hover { opacity: 50%; }
+        </style>
     </head>
     <body>
         <header class="container-lg header">
@@ -31,18 +35,64 @@
             </nav>
         </header>
         <main class="container-lg">
-            <table class="display table table-hover table-sm table-striped" id="waterTable">
+
+            <table class="display table table-borderless table-sm table-striped" id="waterTable">
+                <caption class="caption-top">
+                    <span id="minimumDate"></span>
+                    &mdash;
+                    <span id="maximumDate"></span>
+                </caption>
                 <thead>
                     <tr>
                         <th title="Date">Date</th>
                         <th title="Gallons">Gallons</th>
                     </tr>
                 </thead>
-                <tbody class="table-group-divider">
+                <tbody>
                 </tbody>
+                <tfoot>
+                <tr class="table-group-divider">
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tfoot>
             </table>
             <script>
                 let DateTime = luxon.DateTime;
+                const hugeDateFmt = DateTime.DATE_HUGE
+
+                async function dateDisplay (api, col=0) {
+                    let days = api.column(col).data()
+                    let maxDate = null
+                    let minDate = null
+                    for (let i = 0; i < days.length; i++) {
+                        if (days[i]) {
+                            let testDay = Date.parse(days[i])
+                            if (testDay) {
+                                if (maxDate == null || testDay > maxDate) {
+                                    maxDate = testDay
+                                }
+                                if (minDate == null || testDay < minDate) {
+                                    minDate = testDay
+                                }
+                            }
+                        }
+                    }
+                    if (maxDate) {
+                        const maxDateTime = new DateTime.fromMillis(maxDate)
+                        document.getElementById('maximumDate').innerHTML = `<time datetime="${maxDateTime.toISODate()}">${maxDateTime.toLocaleString(hugeDateFmt)}</time>`
+                    }
+                    if (minDate) {
+                        const minDateTime = new DateTime.fromMillis(minDate)
+                        document.getElementById('minimumDate').innerHTML = `<time datetime="${minDateTime.toISODate()}">${minDateTime.toLocaleString(hugeDateFmt)}</time>`
+                    }
+                }
+
+                async function footerTotal (api, col=1) {
+                    let totalGallons = DataTable.render.number(',', '.', 4).display(api.column(col, {page: 'current'}).data().sum())
+                    api.column(col).footer().innerHTML = `<code class="font-monospace fw-bolder text-bg-dark" title="${totalGallons} total gallons">${totalGallons}</code>`
+                }
+
                 new DataTable('#waterTable', {
                     ajax: {
                         url: 'water.json',
@@ -51,27 +101,40 @@
                     columns: [
                         {
                             data: 'Date',
-                            render: DataTable.render.datetime('DDDD')
+                            render: function (data, type) {
+                                if (type === 'display') {
+                                    let day = Date.parse(data)
+                                    let dt = new DateTime.fromMillis(day).setZone('America/New_York')
+                                    return `<time datetime="${dt.toISODate()}">${dt.toLocaleString(hugeDateFmt)}</time>`
+                                }
+                                return data
+                            },
                         },
                         {
                             data: 'Gallons',
                             render: function (data, type) {
                                 if (type === 'display') {
-                                    let gallonText = 'primary-emphasis'
+                                    let gallonText = 'primary'
                                     if (data > 100) {
-                                        gallonText = 'danger-emphasis'
+                                        gallonText = 'danger'
                                     } else if (data > 75) {
-                                        gallonText = 'warning-emphasis'
+                                        gallonText = 'warning'
                                     } else if (data > 50) {
-                                        gallonText = 'info-emphasis'
+                                        gallonText = 'info'
                                     }
-                                    return `<code class="font-monospace text-${gallonText}" title="${data} gallons">${data}</code>`
+                                    return `<code class="font-monospace text-${gallonText}-emphasis" title="${data} gallons">${data}</code>`
                                 }
                                 return data
                             },
                             type: 'num',
                         }
                     ],
+                    drawCallback: async function () {
+                        await dateDisplay(this.api())
+                    },
+                    footerCallback: async function () {
+                        await footerTotal(this.api())
+                    },
                     language: {
                         'emptyTable': 'No days available in table',
                         'info': 'Showing _START_ to _END_ of _TOTAL_ days',
@@ -83,9 +146,7 @@
                     },
                     layout: {
                         topStart: 'searchBuilder',
-                        topEnd: {
-                            buttons: ['csvHtml5', 'excelHtml5', 'print']
-                        },
+                        topEnd: {buttons: ['csvHtml5', 'excelHtml5', 'print']},
                         bottomStart: 'pageLength',
                         bottom1: 'paging',
                         bottomEnd: 'info'
