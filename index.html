@@ -51,18 +51,24 @@
                     </tr>
                 -->
                 </tbody>
-                <tfoot>
-                    <tr class="h6 table-group-divider">
+                <tfoot class="h6">
+                    <tr class="table-group-divider">
                         <td><b>Total</b>:</td>
-                        <td></td>
+                        <td id="page-gallons"></td>
+                    </tr>
+                    <tr>
+                        <td><b>All</b>:</td>
+                        <td id="total-gallons"></td>
                     </tr>
                 </tfoot>
             </table>
             <script>
                 const DateTime = luxon.DateTime;
-                async function footerTotal (api, col=1) {
-                    let totalGallons = DataTable.render.number(',', '.', 4).display(api.column(col, {page: 'current'}).data().sum())
-                    api.column(col).footer().innerHTML = `<code class="fw-bolder" title="Total: ${totalGallons} Gallons">${totalGallons}</code>`
+                async function footerTotal (api, col=1, digits=4) {
+                    let pageGallons = DataTable.render.number(',', '.', digits).display(api.column(col, {page: 'current'}).data().sum())
+                    let totalGallons = DataTable.render.number(',', '.', digits).display(api.column(col).data().sum())
+                    document.getElementById('page-gallons').innerHTML = `<code class="fw-bolder" title="Total: ${pageGallons} Gallons">${pageGallons}</code>`
+                    document.getElementById('total-gallons').innerHTML = `<code class="fw-bolder" title="All: ${totalGallons} Gallons">${totalGallons}</code>`
                 }
 
                 new DataTable('#waterTable', {
@@ -105,7 +111,7 @@
                     },
                     layout: {
                         topStart: 'searchBuilder',
-                        topEnd: {buttons: ['csvHtml5', 'excelHtml5', 'pdfHtml5', 'print']},
+                        topEnd: {buttons: ['copyHtml5', 'csvHtml5', 'excelHtml5', 'pdfHtml5', 'print']},
                         bottomStart: 'pageLength',
                         bottom1: 'paging',
                         bottomEnd: 'info'
