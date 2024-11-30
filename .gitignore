@@ -1,8 +1,10 @@
 .*
 !.gitignore
-bootstrap/
-chart/chart*.js
-datatables/
+/bootstrap/
+/chart/*.js
+/datatables/
 jquery*.js
 luxon*.js
+*.csv
 *.json
+/venv/
