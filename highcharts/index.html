@@ -41,7 +41,7 @@
                     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                         let waterUsageData = JSON.parse(xhr.responseText)
                         for (const day of Object.values(waterUsageData)) {
-                            waterUsageByDay.push([DateTime.fromISO(day.Date).toMillis(), day.Gallons])
+                            waterUsageByDay.push([DateTime.fromISO(day.date).toMillis(), day.gallons])
                         }
                         const waterHighChart = new Highcharts.Chart(
                             {

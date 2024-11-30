@@ -75,11 +75,11 @@
                     ajax: { url: 'water.json', dataSrc: '' },
                     columns: [
                         {
-                            data: 'Date',
+                            data: 'date',
                             render: DataTable.render.date('yyyy-MM-dd', 'DDDD', 'en')
                         },
                         {
-                            data: 'Gallons',
+                            data: 'gallons',
                             render: (data, type) => {
                                 if (type === 'display') {
                                     let gallonText = 'primary'
