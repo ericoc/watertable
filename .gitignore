@@ -5,6 +5,7 @@
 /datatables/
 jquery*.js
 luxon*.js
+*.bak
 *.csv
 *.json
 /venv/
