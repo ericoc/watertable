@@ -36,8 +36,8 @@
         </header>
         <main class="container-lg">
 
-            <table class="display table table-borderless table-sm table-striped" id="waterTable">
-                <thead>
+            <table class="display table table-borderless table-dark table-responsive table-sm table-striped" id="waterTable">
+                <thead class="h6">
                     <tr>
                         <th title="Date">Date</th>
                         <th title="Gallons">Gallons</th>
@@ -111,7 +111,15 @@
                     },
                     layout: {
                         topStart: 'searchBuilder',
-                        topEnd: {buttons: ['copyHtml5', 'csvHtml5', 'excelHtml5', 'pdfHtml5', 'print']},
+                        topEnd: {
+                            buttons: [
+                                { extend: 'copyHtml5' },
+                                { extend: 'csvHtml5', title: 'WaterTable' },
+                                { extend: 'excelHtml5', title: 'WaterTable' },
+                                { extend: 'pdfHtml5', title: 'WaterTable' },
+                                { extend: 'print' }
+                            ]
+                        },
                         bottomStart: 'pageLength',
                         bottom1: 'paging',
                         bottomEnd: 'info'
