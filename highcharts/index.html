@@ -28,7 +28,7 @@
                 </a>
             </nav>
         </header>
-        <main>
+        <main class="container-fluid">
 
             <div id="water-highchart"></div>
 
@@ -50,13 +50,10 @@
                                 chart: { renderTo: 'water-highchart', zoomType: 'x' },
                                 xAxis: { title: { text: 'Date' }, type: 'datetime' },
                                 yAxis: { title: { text: 'Gallons' } },
-                                legend: { enabled: true },
-                                series: [{ type: 'area', name: 'Gallons', data: waterUsageByDay }]
+                                series: [{ type: 'area', name: 'Gallons', data: waterUsageByDay }],
                             }
                         )
-                        Highcharts.setOptions({
-                            global: { useUTC: false }
-                        })
+                        Highcharts.setOptions({ global: { useUTC: false } })
                     }
                 }
                 xhr.send()
