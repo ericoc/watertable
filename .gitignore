@@ -8,4 +8,6 @@ luxon*.js
 *.bak
 *.csv
 *.json
+*.xls
+*.xlsx
 /venv/
