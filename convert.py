@@ -45,10 +45,10 @@ for day, gallons in merged_days.items():
         "gallons": gallons
     })
 
-# Reverse sort the list, by date, of all merged data.
-merged_usage = sorted(merged_usage, key=lambda i: i["date"], reverse=True)
-logger.info(f"Max:\t{merged_usage[0]['date']}")
-logger.info(f"Min:\t{merged_usage[-1]['date']}")
+# Sort the list, by date, of all merged data.
+merged_usage = sorted(merged_usage, key=lambda i: i["date"])
+logger.info(f"Max:\t{merged_usage[-1]['date']}")
+logger.info(f"Min:\t{merged_usage[0]['date']}")
 with open(file="water.json", mode="w", encoding="utf-8") as merged_fh:
     json.dump(merged_usage, merged_fh, indent=4)
     merged_fh.write("\n")
