@@ -51,11 +51,11 @@ Once the water usage data (again, in gallons) has been converted into JSON,
 and the `water.json` file has been populated, DataTables and HighCharts should work.
 
 #### DataTables
-The main [index.html](`index.html`) page uses DataTables to display the water
+The main [`index.html`](index.html) page uses DataTables to display the water
 usage from the `water.json` file.
 
 #### HighCharts
-[highcharts/index.html](`highcharts/index.html`) uses HighCharts to chart water
+[`highcharts/index.html`](highcharts/index.html) uses HighCharts to chart water
 usage from the `water.json` file.
 
 ---
