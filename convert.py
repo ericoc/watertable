@@ -20,7 +20,7 @@ logger.debug("Files:\t%s" % FILENAMES)
 
 # Create dictionary from (new) CSV data.
 new = {}
-with open(file=FILENAMES["csv"], mode="r", encoding="utf-8") as csv_fh:
+with open(file=FILENAMES["csv"], mode="r") as csv_fh:
     for csv_row in DictReader(csv_fh):
         assert csv_row[" Units"] == " Gallons", "Invalid unit."
         date_parts = csv_row[" Time Interval"].strip().split('/')
@@ -31,7 +31,7 @@ with open(file=FILENAMES["csv"], mode="r", encoding="utf-8") as csv_fh:
 
 # Create dictionary from (existing) JSON data.
 existing = {}
-with open(file=FILENAMES["json"], mode="r", encoding="utf-8") as existing_fh:
+with open(file=FILENAMES["json"], mode="r") as existing_fh:
     existing_usage = json.load(existing_fh)
     for existing_row in existing_usage:
         existing_date = date.fromisoformat(existing_row["date"])
@@ -55,7 +55,7 @@ max_date = date.fromisoformat(usage[-1]["date"])
 logger.info('Maximum:\t%s (%s)' % (max_date.strftime(dt_fmt), max_date))
 
 # Write the list of merged data to existing JSON file.
-with open(file=FILENAMES["json"], mode="w", encoding="utf-8") as merged_fh:
+with open(file=FILENAMES["json"], mode="w") as merged_fh:
     json.dump(usage, merged_fh, indent=4)
     merged_fh.write("\n")
     logger.info("Done:\t%i (%s)" % (len(usage), FILENAMES["json"]))
