@@ -1,6 +1,7 @@
 .*
 !.gitignore
 /bootstrap/
+/bootstrap-icons/
 /datatables/
 jquery*.js
 luxon*.js
