@@ -7,7 +7,6 @@ in "comma-separated values" (CSV) file format.
 ---
 
 ## Export
-
 A CSV can be downloaded by "Gallons" of water used "Daily" from the
 "[Detailed Usage](https://secure8.i-doxs.net/CityOfPhiladelphiaWRB/Secure/Usage.aspx)"
 section of the Philadelphia Water Department (PWD) website.
@@ -34,8 +33,8 @@ should always be " ` Gallons`".
 ## Import
 With a `ChartData.csv` file from PWD, the Django management command `fill`
 is used to import records into the Django database from the `.CSV` file data:
-```
-(venv) ➜ eric@pro:~/code/watertable git:(main) ✗ $ python3 manage.py fill
+```python
+$ python3 manage.py fill
 Created:        Wednesday, November 27, 2024 (2024-11-27) [18.7013 gallons]
 Created:        Thursday, November 28, 2024 (2024-11-28) [35.9065 gallons]
 Created:        Friday, November 29, 2024 (2024-11-29) [35.1584 gallons]
@@ -49,21 +48,39 @@ Done.
 
 ---
 
-### Software
-The main page (`/`) uses DataTables, while `/chart/` uses HighCharts.
-
-Both DataTables and HighCharts depend upon identical JSON data from the same
-Django REST framework API location:
-
-`/api/usage/?format=json`
-
-### Refreshing Data
+## Refreshing
 Finally, downloading a fresh `ChartData.csv` file from the Philadelphia Water
 Department website, and running `manage.py fill` again will update, or create,
 any water usage records for the appropriate days.
 
 It appears that the Philadelphia Water Department website may only preserve
 approximately two (2) years of historical water usage.
+
+---
+
+## Statistics
+Once water usage data is present in the database, the management command
+`manage.py weekend` will display interesting statistics about the water usage:
+```python
+$ python3 manage.py weekend
+From:           Thursday, September 15, 2022 (2022-09-15)
+To:             Wednesday, December 04, 2024 (2024-12-04)
+Weekdays:       19,359.5858 gallons / 578 week days = average 33.4941 gallons.
+Weekends:       13,119.3358 gallons / 229 weekend days = average 57.2897 gallons.
+Total:          32,478.9216 gallons / 807 days = average 40.2465 gallons.
+```
+The total and average water usage per day is shown, as well as the total
+and average water usage on week-days versus weekends.
+
+---
+
+## Software
+The main page (`/`) uses DataTables, while `/chart/` uses HighCharts.
+
+Both DataTables and HighCharts depend upon identical JSON data from the same
+Django REST framework API location:
+
+`/api/usage/?format=json`
 
 ---
 
