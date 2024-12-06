@@ -6,4 +6,4 @@ workers = cpu_count() * 2 + 1
 threads = 2
 keepalive = 300
 capture_output = True
-accesslog = errorlog = "/var/www/watertable/gunicorn.log"
+accesslog = errorlog = "/var/www/watertable/logs/gunicorn.log"
