@@ -17,7 +17,7 @@ class WaterUsage(models.Model):
     )
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "usage"
         ordering = ("date",)
         verbose_name = verbose_name_plural = "Water Usage"
