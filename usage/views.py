@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.views.generic import TemplateView
 
 from .models import WaterUsage

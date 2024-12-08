@@ -44,8 +44,6 @@
         totalGallonsNode.innerHTML = `<code class="fw-bolder">${totalGallons}</code>`
         totalGallonsNode.title = `All: ${totalGallons} Total Gallons`
     }
-
-    const defaultLength = 10
     const exportFileName = 'WaterTable'
     const resultName = 'days'
     new DataTable('#waterTable', {
@@ -124,12 +122,11 @@
             bottomEnd: 'info'
         },
         lengthMenu: [
-            5,
-            {label: `${defaultLength} (default)`, value: defaultLength},
-            15, 20, 25, 50, 75, 100,
-            {label: 'all', value: -1}
+            1, 2, 3, 4, 5, 6, {label: `7 *`, value: 7}, 8, 9,
+            10, 14, 21, 30, 45, 60, 90, 120, 150, 180, 210, 240, 270,
+            300, 330, 365, {label: 'All', value: -1}
         ],
         order: [[0, 'desc']],
-        pageLength: defaultLength,
+        pageLength: 7,
     })
 {% endblock scripts %}
