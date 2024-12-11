@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block css %}
+    .highcharts-container text { stroke: var(--bs-light); }
+{% endblock css %}
 {% block main %}
-    <div id="water-highchart"></div>
+    <div id="water-chart"></div>
     <script src="{% static '/highcharts/highcharts.js' %}"></script>
 {% endblock main %}
 {% block scripts %}
@@ -14,16 +17,23 @@
             for (const day of Object.values(waterUsageData)) {
                 waterUsageByDay.push([DateTime.fromISO(day.date).toMillis(), day.gallons])
             }
-            const waterHighChart = new Highcharts.Chart(
-                {
-                    title: { text: 'Water Usage' },
-                    subtitle: { text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in' },
-                    chart: { renderTo: 'water-highchart', zoomType: 'x' },
-                    xAxis: { title: { text: 'Date' }, type: 'datetime' },
-                    yAxis: { title: { text: 'Gallons' } },
-                    series: [{ type: 'area', name: 'Gallons', data: waterUsageByDay }],
-                }
-            )
+            const waterHighChart = new Highcharts.Chart({
+                title: {  style: { color: '#f8f9fa' }, text: 'Water Usage' },
+                subtitle: {  style: { color: '#f8f9fa' }, text: document.ontouchstart === undefined ? 'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in' },
+                chart: {
+                    backgroundColor: '#212529',
+                    renderTo: 'water-chart',
+                    zoomType: 'x'
+                },
+                xAxis: { title: { text: 'Date' }, type: 'datetime' },
+                yAxis: { title: { text: 'Gallons' } },
+                series: [{
+                    data: waterUsageByDay,
+                    name: 'Gallons',
+                    states: { hover: { lineWidthPlus: 0 } },
+                    type: 'line'
+                }]
+            })
             Highcharts.setOptions({ global: { useUTC: false } })
         }
     }
