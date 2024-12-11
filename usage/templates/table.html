@@ -44,6 +44,8 @@
         totalGallonsNode.innerHTML = `<code class="fw-bolder">${totalGallons}</code>`
         totalGallonsNode.title = `All: ${totalGallons} Total Gallons`
     }
+    const defaultLength = 7
+    const tableLength = parseInt(localStorage.getItem('tableLength') || defaultLength)
     const exportFileName = 'WaterTable'
     const resultName = 'days'
     new DataTable('#waterTable', {
@@ -127,6 +129,7 @@
             300, 330, 365, {label: 'All', value: -1}
         ],
         order: [[0, 'desc']],
-        pageLength: 7,
+        pageLength: tableLength,
+        stateSave: true
     })
 {% endblock scripts %}
